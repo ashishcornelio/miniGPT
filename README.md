@@ -13,11 +13,9 @@ A compact end-to-end Python code generation pipeline using a MiniGPT-style trans
 ## Key files
 
 - `download_datasets.py`: downloads multiple open-source Hugging Face code datasets and saves them to `python_training_data.txt`
-- `prepare_dataset.py`: merges local and downloaded text sources into `combined_training_data.txt` and creates `training_corpus.txt`
 - `train_complete.py`: full tokenizer + model training pipeline, checkpointing to `checkpoints/`
 - `generate_with_model.py`: loads a trained model and tokenizer to generate Python code from a text prompt
 - `app.py`: Flask web interface for training, generation, and dataset management
-- `delete_trained_data.py`: removes `checkpoints/`, `logs/`, and `tokenizer/`
 - `requirements.txt`: Python dependencies used by the project
 
 ## Prerequisites
@@ -28,10 +26,11 @@ A compact end-to-end Python code generation pipeline using a MiniGPT-style trans
 
 ## Setup
 
-1. Activate the project virtual environment if available:
+1. Create and activate the project virtual environment:
 
 ```powershell
-.\venv312\Scripts\activate
+python -m venv venv
+.\venv\Scripts\activate
 ```
 
 2. Install required Python packages:
@@ -50,15 +49,7 @@ python download_datasets.py
 
 This creates `python_training_data.txt` by extracting code snippets from selected Hugging Face datasets.
 
-### 2. Combine and prepare data
-
-```powershell
-python prepare_dataset.py
-```
-
-This merges available sources into `combined_training_data.txt` and writes a cleaned corpus to `training_corpus.txt`.
-
-### 3. Train the model
+### 2. Train the model
 
 ```powershell
 python train_complete.py --data combined_training_data.txt --epochs 3 --batch-size 4 --lr 1e-4 --max-length 256 --chunk-size 500000
@@ -68,30 +59,24 @@ python train_complete.py --data combined_training_data.txt --epochs 3 --batch-si
 - Training logs are saved under `logs/`
 - The final model is saved as `checkpoints/minigpt_final.pt`
 
-### 4. Generate code
+### OR
 
-```powershell
-python generate_with_model.py --model checkpoints/minigpt_final.pt --prompt "def " --length 100 --temp 0.7
-```
-
-### 5. Run the web UI
+### 3. Run the Flask web UI
 
 ```powershell
 python app.py
 ```
 
-Then open `http://127.0.0.1:5000` in your browser.
+Then open `http://127.0.0.1:5000` in your browser. Use the UI to:
+- launch dataset preparation and data download
+- start and monitor training
+- run code generation from a prompt
+- delete checkpoints, logs, tokenizer data, or downloaded datasets safely
 
-The web UI lets you:
-- prepare the dataset
-- start/monitor training
-- generate code
-- delete datasets and trained data safely
-
-### 6. Delete trained artifacts
+### 4. Generate code
 
 ```powershell
-python delete_trained_data.py
+python generate_with_model.py --model checkpoints/minigpt_final.pt --prompt "def " --length 100 --temp 0.7
 ```
 
 ## Notes
