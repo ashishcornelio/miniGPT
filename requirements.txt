@@ -1,0 +1,10 @@
+torch==2.7.1+cu118
+torchvision==0.22.1+cu118
+torchaudio==2.7.1+cu118
+tokenizers==0.15.2
+datasets==2.14.0
+tqdm==4.66.1
+numpy==2.4.3
+requests==2.31.0
+beautifulsoup4==4.12.2
+flask==2.3.3
